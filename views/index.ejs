@@ -2,10 +2,31 @@
 <html>
   <head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/socket.io/socket.io.js"></script>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.min.css">
+	<script type="text/javascript" src="/javascripts/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		var socket = io.connect('http://localhost:3000/');
+
+		function startCrawler(){
+			socket.emit('start crawler', {type : 'all'});
+		}
+
+		function updateItemInfo(){
+			socket.emit('update target', {type : 'all'});
+		}
+	</script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+  	<div class="container">
+  		<h1><%= title %></h1>
+    	<p>Welcome to <%= title %></p>
+
+    	<button class="btn" onclick="javascript:updateItemInfo()">更新</button>
+    	<button class="btn" onclick="javascript:startCrawler()">抓取</button>
+
+  	</div>
+    
   </body>
 </html>
