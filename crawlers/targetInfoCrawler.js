@@ -27,6 +27,7 @@ exports.start = function(target, outercallback){
 
 		function(callback){
 			
+			driver.get(target.shopUrl);
 			driver.get(target.url);
 			driver.findElement({className : 'tb-detail-hd'}).then(function(e){
 				e.getText().then(function(text){

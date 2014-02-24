@@ -5,6 +5,7 @@ function Target(target){
 	this.title = target.title;
 	this.type = target.type;
 	this.tid = target.tid;
+	this.shopUrl = target.shopUrl;
 };
 
 module.exports = Target;
@@ -14,7 +15,8 @@ Target.prototype.save = function(callback){
 		tid : this.tid,
 		url : this.url,
 		type : this.type,
-		title : this.title
+		title : this.title,
+		shopUrl : this.shopUrl
 	};
 
 	conn.collection('targets').count({url : tt.url}, function(err, c){

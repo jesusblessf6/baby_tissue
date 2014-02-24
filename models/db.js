@@ -2,7 +2,7 @@
 config of mongo db
 */
 
-var db_path = "mongodb://172.20.67.217:27017/baby_tissue";
+var db_path = "mongodb://172.20.67.107:27017/baby_tissue";
 //var db_path = "localhost:27017/taobao_DA";
 exports.db_path = db_path;
 
