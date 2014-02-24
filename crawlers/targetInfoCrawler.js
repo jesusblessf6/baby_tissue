@@ -29,7 +29,13 @@ exports.start = function(target, outercallback){
 			
 			driver.get(target.shopUrl);
 			driver.get(target.url);
-			driver.findElement({className : 'tb-detail-hd'}).then(function(e){
+			var cn;
+			if(target.type == 'tmall'){
+				cn = 'tb-detail-hd';
+			}else{
+				cn = "tb-item-title";
+			}
+			driver.findElement({className : cn}).then(function(e){
 				e.getText().then(function(text){
 					tt.title = text;
 				});

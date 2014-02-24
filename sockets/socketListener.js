@@ -15,7 +15,7 @@ module.exports = function(io){
 					if(err){
 						console.log(err);
 					}else if(results){
-
+						async.eachSeries();
 					}
 				});
 			}
@@ -41,6 +41,7 @@ module.exports = function(io){
 				});
 			}
 		});
+
 	});
 
 };
