@@ -7,11 +7,10 @@ exports.start = function(item, outercallback){
 		async.series([
 			function(callback){
 				driver.get(item.shopUrl).then(callback);
-				//callback();
 			}, 
 
 			function(callback){
-				driver.get(item.url).then(callback);
+				driver.get(item.url).then(setTimeout(callback, 10000));
 			},
 
 			function(callback){
