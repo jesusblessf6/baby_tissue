@@ -238,6 +238,14 @@ exports.start = function(item, outercallback){
 			},
 
 			function(callback){
+				driver.findElement({id : "review-cb-hascnt"}).then(function(cb){
+					cb.click();
+				}).then(function(){
+					setTimeout(callback, 3000);
+				});
+			},
+
+			function(callback){
 				var flag = true;
 
 				async.whilst(
@@ -246,8 +254,22 @@ exports.start = function(item, outercallback){
 						async.series([
 							function(callback){
 								driver.findElement({className : "tb-r-comments"}).then(function(cs){
-									
+									cs.findElements({tagName : "li"}).then(function(cslis){
+										async.eachSeries(cslis, function(csli, callback){
+											
+										}, function(err){
+											if(err){
+												console.log(err);
+											}
+
+										});
+									});
 								}).then(callback);
+							},
+
+							function(callback){
+								//next page
+								callback();
 							}
 						], function(err){
 							if(err){
