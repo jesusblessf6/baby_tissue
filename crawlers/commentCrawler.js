@@ -5,6 +5,7 @@ exports.start = function(item, outercallback){
 	//console.log(item);
 	var moment = require('moment');
 	var Comment = require('../models/comment');
+	driver.manage().window().maximize();
 
 	if(item.type == 'tmall'){
 		async.series([
@@ -70,7 +71,7 @@ exports.start = function(item, outercallback){
 							driver.findElement({className : "rate-grid"}).then(function(rateGrid){
 								rateGrid.findElements({tagName : "tr"}).then(function(trs){
 									async.eachSeries(trs, function(tr, callback){
-										var tmpcomment = {};
+										var tmpcomment = {tid : item.tid};
 										async.series([
 											function(callback){
 												//get the comment content

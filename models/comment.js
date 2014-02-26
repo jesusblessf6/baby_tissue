@@ -1,6 +1,7 @@
 var conn = require('./db').conn;
 
 function Comment(comment){
+	this.tid = comment.tid;
 	this.content = comment.content;
 	this.cusName = comment.cusName;
 	this.publishDate = comment.publishDate;
@@ -18,10 +19,11 @@ Comment.prototype.save = function(callback){
 		publishDate : this.publishDate,
 		spec : this.spec,
 		cusLink : this.cusLink,
-		isAnonymous : this.isAnonymous
+		isAnonymous : this.isAnonymous,
+		tid : this.tid
 	};
 
-	conn.collection('comments').count({content : tc.content, publishDate : tc.publishDate, cusName : tc.cusName}, function(err, c){
+	conn.collection('comments').count({tid : tc.tid , content : tc.content, publishDate : tc.publishDate, cusName : tc.cusName, spec : tc.spec}, function(err, c){
 		if(err){
 			return callback(err);
 		}
