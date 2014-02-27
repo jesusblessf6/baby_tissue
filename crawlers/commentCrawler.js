@@ -5,7 +5,7 @@ exports.start = function(item, outercallback){
 	//console.log(item);
 	var moment = require('moment');
 	var Comment = require('../models/comment');
-	driver.manage().window().maximize();
+	driver.manage().window().setSize(1600, 1000);
 
 	if(item.type == 'tmall'){
 		async.series([
@@ -220,21 +220,21 @@ exports.start = function(item, outercallback){
 			},
 
 			function(callback){
-				//driver.get(item.url + "#bd").then(callback);
-				driver.executeScript(function(){
-					document.getElementById("bd").scrollIntoView();
-				}).then(function(){
-					setTimeout(callback, 2000);
-				});
+				driver.get(item.url + "#bd").then(callback);
+				// driver.executeScript(function(){
+				// 	document.getElementById("bd").scrollIntoView();
+				// }).then(function(){
+				// 	setTimeout(callback, 2000);
+				// });
 			},
 
 			function(callback){
-				//driver.get(item.url + "#J_TabBarWrap").then(callback);
-				driver.executeScript(function(){
-					document.getElementById("J_TabBarWrap").scrollIntoView();
-				}).then(function(){
-					setTimeout(callback, 2000);
-				});
+				driver.get(item.url + "#J_TabBarWrap").then(callback);
+				// driver.executeScript(function(){
+				// 	document.getElementById("J_TabBarWrap").scrollIntoView();
+				// }).then(function(){
+				// 	setTimeout(callback, 2000);
+				// });
 			},
 
 			function(callback){
@@ -266,11 +266,25 @@ exports.start = function(item, outercallback){
 
 							function(callback){
 								driver.findElement({className : "tb-r-comments"}).then(function(cs){
-									cs.findElements({className : "tb-r-review"}).then(function(cslis){
+									cs.findElements({tagName : "li"}).then(function(cslis){
 										console.log(cslis.length);
-										async.eachSeries(cslis, function(csli, callback){
+										var i = 0;
+										async.eachSeries(cslis, function(csli, xcallback){
+											i ++;
+											console.log(i);
 											var tmpcomment = {tid : item.tid};
 											async.series([
+												function(callback){
+													csli.getAttribute('class').then(function(className){
+														if(className != 'tb-r-review'){
+															xcallback();
+														}
+														else{
+															callback();
+														}
+													});
+												},
+
 												function(callback){
 													csli.getAttribute("data-uid").then(function(uid){
 														if(uid && uid != ""){
@@ -303,9 +317,13 @@ exports.start = function(item, outercallback){
 												},
 
 												function(callback){
-													csli.findElement({className : 'tb-r-cnt'}).then(function(es){
-														es.getText().then(function(x){
-															tmpcomment.content = x;
+													csli.findElement({className : 'tb-r-bd'}).then(function(rbd){
+														rbd.findElement({className : 'tb-rev-item'}).then(function(revitem){
+															revitem.findElement({className : 'tb-r-cnt'}).then(function(es){
+																es.getText().then(function(x){
+																	tmpcomment.content = x;
+																});
+															});
 														});
 													}).then(callback);
 												},
@@ -331,8 +349,11 @@ exports.start = function(item, outercallback){
 													c.save(function(err, result){
 														if(err){
 															console.log(err);
+															xcallback();
+														}else{
+															callback();
 														}
-														callback();
+														
 													})
 												}
 
@@ -340,7 +361,7 @@ exports.start = function(item, outercallback){
 												if(err){
 													console.log(err);
 												}
-												callback();
+												xcallback();
 											});
 										}, function(err){
 											if(err){
