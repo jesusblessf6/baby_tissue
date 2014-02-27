@@ -220,11 +220,21 @@ exports.start = function(item, outercallback){
 			},
 
 			function(callback){
-				driver.get(item.url + "#bd").then(callback);
+				//driver.get(item.url + "#bd").then(callback);
+				driver.executeScript(function(){
+					document.getElementById("bd").scrollIntoView();
+				}).then(function(){
+					setTimeout(callback, 2000);
+				});
 			},
 
 			function(callback){
-				driver.get(item.url + "#J_TabBarWrap").then(callback);
+				//driver.get(item.url + "#J_TabBarWrap").then(callback);
+				driver.executeScript(function(){
+					document.getElementById("J_TabBarWrap").scrollIntoView();
+				}).then(function(){
+					setTimeout(callback, 2000);
+				});
 			},
 
 			function(callback){
@@ -241,7 +251,7 @@ exports.start = function(item, outercallback){
 				driver.findElement({id : "review-cb-hascnt"}).then(function(cb){
 					cb.click();
 				}).then(function(){
-					setTimeout(callback, 3000);
+					setTimeout(callback, 5000);
 				});
 			},
 
@@ -256,7 +266,8 @@ exports.start = function(item, outercallback){
 
 							function(callback){
 								driver.findElement({className : "tb-r-comments"}).then(function(cs){
-									cs.findElements({tagName : "li"}).then(function(cslis){
+									cs.findElements({className : "tb-r-review"}).then(function(cslis){
+										console.log(cslis.length);
 										async.eachSeries(cslis, function(csli, callback){
 											var tmpcomment = {tid : item.tid};
 											async.series([
@@ -265,7 +276,9 @@ exports.start = function(item, outercallback){
 														if(uid && uid != ""){
 															tmpcomment.cusTid = uid;
 														}														
-													}).then(callback);
+													}).then(function(){
+														setTimeout(callback, 2000);
+													});
 												},
 												
 												function(callback){
@@ -290,18 +303,9 @@ exports.start = function(item, outercallback){
 												},
 
 												function(callback){
-													csli.findElements({className : 'tb-r-cnt'}).then(function(es){
-														var ct = "";
-														async.eachSeries(es, function(e, callback){
-															e.getText().then(function(et){
-																ct = ct + et;
-															}).then(callback);
-														}, function(err){	
-															if(err){
-																console.log(err);
-															}else{
-																tmpcomment.content = ct;
-															}
+													csli.findElement({className : 'tb-r-cnt'}).then(function(es){
+														es.getText().then(function(x){
+															tmpcomment.content = x;
 														});
 													}).then(callback);
 												},
