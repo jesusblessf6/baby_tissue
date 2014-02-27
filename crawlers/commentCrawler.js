@@ -252,6 +252,8 @@ exports.start = function(item, outercallback){
 					function(){return flag;},
 					function(callback){
 						async.series([
+
+
 							function(callback){
 								driver.findElement({className : "tb-r-comments"}).then(function(cs){
 									cs.findElements({tagName : "li"}).then(function(cslis){
@@ -267,22 +269,21 @@ exports.start = function(item, outercallback){
 												},
 												
 												function(callback){
-													csli.findElement({className : 'tb-r-avatar'}).then(function(avatarDiv){
-														avatarDiv.findElement({className : 'tb-r-ulink'}).then(function(nickLink){
-															nickLink.getAttribute('data-nick').then(function(n){
-																tmpcomment.cusName = n;
-															}).then(function(){
-																nickLink.getTagName().then(function(tagname){
-																	if(tagname == "a" || tagname == "A"){
-																		tmpcomment.isAnonymous = false;
-																		nickLink.getAttribute('href').then(function(l){
-																			tmpcomment.cusLink = l;
-																		});
-																	}else{
-																		tmpcomment.isAnonymous = true;
-																	}
+													
+													csli.findElement({className : 'tb-r-ulink'}).then(function(nickLink){
+														nickLink.getAttribute('data-nick').then(function(n){
+															tmpcomment.cusName = n;
+														}).then(function(){
+															nickLink.getTagName().then(function(tagname){
+																if(tagname == "a" || tagname == "A"){
+																	tmpcomment.isAnonymous = false;
+																	nickLink.getAttribute('href').then(function(l){
+																		tmpcomment.cusLink = l;
+																	});
+																}else{
+																	tmpcomment.isAnonymous = true;
+																}
 
-																});
 															});
 														});
 													}).then(callback);
@@ -347,28 +348,15 @@ exports.start = function(item, outercallback){
 							},
 
 							function(callback){
-								// driver.navigate().to(item.url + "#J_Pagination").then(function(){
-								// 	driver.findElement({id : 'J_Pagination'}).then(function(pagination){
-								// 		pagination.isElementPresent({linkText : '下一页'}).then(function(p){
-								// 			if(p){
-								// 				pagination.findElement({linkText : '下一页'}).then(function(nextPageLink){
-								// 					//nextPageLink.click();
-								// 					nextPageLink.getAttribute('data-val').then(function(v){
-								// 						console.log(v);
-								// 					});
-								// 					nextPageLink.getAttribute('tagName').then(function(v){
-								// 						console.log(v);
-								// 					});
-								// 					nextPageLink.click();
-								// 				});
-								// 			}else{
-								// 				flag = false;
-								// 			}
-								// 		});
-								// 	});
-								// }).then(function(){
-								// 	setTimeout(callback, 3000);
-								// });
+								driver.executeScript(function(){
+									document.getElementById("review-cb-hascnt").scrollIntoView();
+								}).then(function(){
+									setTimeout(callback, 2000);
+								});
+							},
+
+							function(callback){
+								
 								//next page
 								driver.isElementPresent({linkText : '下一页'}).then(function(p){
 									if(p){
@@ -379,9 +367,9 @@ exports.start = function(item, outercallback){
 										flag = false;
 									}
 								}).then(function(){
-									setTimeout(callback, 3000);
+									setTimeout(callback, 4000);
 								});
-								
+
 							}
 						], function(err){
 							if(err){
