@@ -43,3 +43,12 @@ Comment.prototype.save = function(callback){
 		}
 	});
 };
+
+Comment.getNamedComments = function(callback){
+	conn.collection('comments').find({isAnonymous : false}).toArray(function(err, results){
+		if(err){
+			return callback(err);
+		}
+		callback(null, results);
+	});
+}
