@@ -15,7 +15,7 @@ module.exports = function(app){
 
 	app.get('/comments', function(req, res){
 		var Comment = require('../models/comment');
-		Comment.getNamedComments(function(err, results){
+		Comment.getAllComments(function(err, results){
 			if(err){console.log(err)}
 			else{
 				res.render('commentsList', {title : '评论', results : results});

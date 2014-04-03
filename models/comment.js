@@ -51,4 +51,13 @@ Comment.getNamedComments = function(callback){
 		}
 		callback(null, results);
 	});
-}
+};
+
+Comment.getAllComments = function(callback){
+	conn.collection('comments').find({}).toArray(function(err, results){
+		if(err){
+			return callback(err);
+		}
+		callback(null, results);
+	});
+};
